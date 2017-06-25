@@ -132,16 +132,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UIGame.cpp" />
+    <ClCompile Include="User.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UIGame.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="User.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Controllers\Controllers.vcxproj">
-      <Project>{185b7166-07f5-4e07-b331-2b9f673c10de}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\Game.Models\Game.Models.vcxproj">
       <Project>{14055a89-bcb2-4dda-89cc-331abf675383}</Project>
     </ProjectReference>
@@ -149,6 +150,9 @@
   <ItemGroup>
     <EmbeddedResource Include="UIGame.resx">
       <DependentUpon>UIGame.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User.resx">
+      <DependentUpon>User.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

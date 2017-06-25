@@ -93,7 +93,9 @@ namespace GameViews {
 	private: System::Windows::Forms::Label^  lblSpeedText;
 
 	private: System::Windows::Forms::Label^  lblResultado;
-	private: System::Windows::Forms::PictureBox^  pictureBox2;
+	private: System::Windows::Forms::PictureBox^  pbArrowSuccess;
+
+
 	private: System::Windows::Forms::Timer^  timerArrows;
 	private: System::Windows::Forms::PictureBox^  pbArrows;
 
@@ -123,10 +125,10 @@ namespace GameViews {
 			this->lblTimeText = (gcnew System::Windows::Forms::Label());
 			this->lblSpeedText = (gcnew System::Windows::Forms::Label());
 			this->lblResultado = (gcnew System::Windows::Forms::Label());
-			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
+			this->pbArrowSuccess = (gcnew System::Windows::Forms::PictureBox());
 			this->timerArrows = (gcnew System::Windows::Forms::Timer(this->components));
 			this->pbArrows = (gcnew System::Windows::Forms::PictureBox());
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pbArrowSuccess))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pbArrows))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -186,19 +188,21 @@ namespace GameViews {
 			this->lblResultado->TabIndex = 6;
 			this->lblResultado->Text = L"Resultado";
 			// 
-			// pictureBox2
+			// pbArrowSuccess
 			// 
-			this->pictureBox2->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
+			this->pbArrowSuccess->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
 				| System::Windows::Forms::AnchorStyles::Left)
 				| System::Windows::Forms::AnchorStyles::Right));
-			this->pictureBox2->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Center;
-			this->pictureBox2->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox2.Image")));
-			this->pictureBox2->Location = System::Drawing::Point(37, 585);
-			this->pictureBox2->Name = L"pictureBox2";
-			this->pictureBox2->Size = System::Drawing::Size(525, 123);
-			this->pictureBox2->SizeMode = System::Windows::Forms::PictureBoxSizeMode::CenterImage;
-			this->pictureBox2->TabIndex = 1;
-			this->pictureBox2->TabStop = false;
+			this->pbArrowSuccess->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Center;
+			this->pbArrowSuccess->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pbArrowSuccess.Image")));
+			this->pbArrowSuccess->Location = System::Drawing::Point(54, 585);
+			this->pbArrowSuccess->Name = L"pbArrowSuccess";
+			this->pbArrowSuccess->Size = System::Drawing::Size(480, 120);
+			this->pbArrowSuccess->SizeMode = System::Windows::Forms::PictureBoxSizeMode::CenterImage;
+			this->pbArrowSuccess->TabIndex = 1;
+			this->pbArrowSuccess->TabStop = false;
+			this->pbArrowSuccess->Visible = false;
+			this->pbArrowSuccess->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &UIGame::pbArrowSuccess_Paint);
 			// 
 			// timerArrows
 			// 
@@ -208,10 +212,14 @@ namespace GameViews {
 			// 
 			// pbArrows
 			// 
+			this->pbArrows->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
+				| System::Windows::Forms::AnchorStyles::Left)
+				| System::Windows::Forms::AnchorStyles::Right));
 			this->pbArrows->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pbArrows.Image")));
 			this->pbArrows->Location = System::Drawing::Point(59, 59);
 			this->pbArrows->Name = L"pbArrows";
-			this->pbArrows->Size = System::Drawing::Size(480, 480);
+			this->pbArrows->Size = System::Drawing::Size(480, 600);
+			this->pbArrows->SizeMode = System::Windows::Forms::PictureBoxSizeMode::CenterImage;
 			this->pbArrows->TabIndex = 7;
 			this->pbArrows->TabStop = false;
 			this->pbArrows->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &UIGame::pbArrows_Paint);
@@ -227,13 +235,13 @@ namespace GameViews {
 			this->Controls->Add(this->lblTimeText);
 			this->Controls->Add(this->lblSpeed);
 			this->Controls->Add(this->lblTiempo);
-			this->Controls->Add(this->pictureBox2);
+			this->Controls->Add(this->pbArrowSuccess);
 			this->MaximizeBox = false;
 			this->Name = L"UIGame";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"UIGame";
 			this->Load += gcnew System::EventHandler(this, &UIGame::UIGame_Load);
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pbArrowSuccess))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pbArrows))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
@@ -255,6 +263,7 @@ private: System::Void timerGame_Tick(System::Object^  sender, System::EventArgs^
 
 	lblTiempo->Text = timer + "";
 
+
 }
 
 
@@ -264,27 +273,33 @@ private: System::Void timerArrows_Tick(System::Object^  sender, System::EventArg
 	speed++;
 	lblSpeed->Text = speed + "";
 
-
+	// LLuvia de Flechas
 	Graphics^ graphic = this->CreateGraphics();
+	graphic->Clear(Color::Black);
+
+	Graphics^ graphic2 = this->CreateGraphics();
 
 	int ancho = pbArrows->Width / 4;
-	int alto = pbArrows->Height / 4;
+	int alto = pbArrows->Height / 5;
+
 
 	//Selecciomos un bloque de una flecha utilizando rectangulo
 
 	Rectangle sectionVisibleCol1 = Rectangle(ancho * idSpriteXCol1, alto * idSpriteYCol2, ancho, alto);
-
+	//graphic->Clear(Color::Black);
 	//Columna 1
 
-	graphic->DrawImage(pbArrows->Image, 45, yCol1, sectionVisibleCol1, GraphicsUnit::Pixel);
+	graphic->DrawImage(pbArrows->Image, 30, yCol1, sectionVisibleCol1, GraphicsUnit::Pixel);
+	
 
 	if (yCol1 == 550) {
 		yCol1 = 0;
 		sCol1 = false;
-
+		
 		// Random de Sprits X y Y
 		idSpriteXRandomCol1 = rand() % 3;
 		idSpriteYRandomCol1 = rand() % 3;
+
 
 		//Cambiar Sprits
 
@@ -314,7 +329,7 @@ private: System::Void timerArrows_Tick(System::Object^  sender, System::EventArg
 
 	Rectangle sectionVisibleCol2 = Rectangle(ancho * idSpriteXCol2, alto * idSpriteYCol2, ancho, alto);
 
-	graphic->DrawImage(pbArrows->Image, 170, yCol2, sectionVisibleCol2, GraphicsUnit::Pixel);
+	graphic->DrawImage(pbArrows->Image, 160, yCol2, sectionVisibleCol2, GraphicsUnit::Pixel);
 
 	if (yCol2 == 550) {
 	yCol2 = 0;
@@ -351,7 +366,7 @@ private: System::Void timerArrows_Tick(System::Object^  sender, System::EventArg
 
 	Rectangle sectionVisibleCol3 = Rectangle(ancho * idSpriteXCol3, alto * idSpriteYCol3, ancho, alto);
 
-	graphic->DrawImage(pbArrows->Image, 300, yCol3, sectionVisibleCol3, GraphicsUnit::Pixel);
+	graphic->DrawImage(pbArrows->Image, 290, yCol3, sectionVisibleCol3, GraphicsUnit::Pixel);
 
 	if (yCol3 == 550) {
 	yCol3 = 0;
@@ -389,7 +404,7 @@ private: System::Void timerArrows_Tick(System::Object^  sender, System::EventArg
 
 	Rectangle sectionVisibleCol4 = Rectangle(ancho * idSpriteXCol4, alto * idSpriteYCol4, ancho, alto);
 
-	graphic->DrawImage(pbArrows->Image, 425, yCol4, sectionVisibleCol4, GraphicsUnit::Pixel);
+	graphic->DrawImage(pbArrows->Image, 420, yCol4, sectionVisibleCol4, GraphicsUnit::Pixel);
 
 	if (yCol4 == 550) {
 	yCol4 = 0;
@@ -420,9 +435,33 @@ private: System::Void timerArrows_Tick(System::Object^  sender, System::EventArg
 	yCol4++;
 	}
 	
+	
+	// Flechas de Aciertos
 
+	int anchoAcierto = pbArrows->Width / 4;
+	int altoAcierto = pbArrows->Height / 1;
+
+	// Columnas de aciertos
+
+	
+		Rectangle sectionArrowsSuccessCol1 = Rectangle(anchoAcierto * idSpriteXCol1, altoAcierto * 0, anchoAcierto, altoAcierto);
+		graphic->DrawImage(pbArrowSuccess->Image, 10, 550, sectionArrowsSuccessCol1, GraphicsUnit::Pixel);
+
+		Rectangle sectionArrowsSuccessCol2 = Rectangle(anchoAcierto * idSpriteXCol2, altoAcierto * 0, anchoAcierto, altoAcierto);
+		graphic->DrawImage(pbArrowSuccess->Image, 140, 550, sectionArrowsSuccessCol2, GraphicsUnit::Pixel);
+
+		Rectangle sectionArrowsSuccessCol3 = Rectangle(anchoAcierto * idSpriteXCol3, altoAcierto * 0, anchoAcierto, altoAcierto);
+		graphic->DrawImage(pbArrowSuccess->Image, 270, 550, sectionArrowsSuccessCol3, GraphicsUnit::Pixel);
+
+		Rectangle sectionArrowsSuccessCol4 = Rectangle(anchoAcierto * idSpriteXCol4, altoAcierto * 0, anchoAcierto, altoAcierto);
+		graphic->DrawImage(pbArrowSuccess->Image, 400, 550, sectionArrowsSuccessCol4, GraphicsUnit::Pixel);
+	
+	
 }
 private: System::Void pbArrows_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e) {
+	this->pbArrows->Visible = false;
+}
+private: System::Void pbArrowSuccess_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e) {
 	this->pbArrows->Visible = false;
 }
 };
