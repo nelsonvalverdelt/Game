@@ -1,5 +1,0 @@
-﻿  UIGame.cpp
-  User.cpp
-User.cpp(4): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
-  Generando código...
-  Game.Views.vcxproj -> D:\Repository\Game\x64\Debug\Game.Views.exe
