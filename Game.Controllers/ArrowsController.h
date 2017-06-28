@@ -3,12 +3,14 @@
 #include <vector>
 #include <stdlib.h>
 #include "../Game.Models/ArrowsModel.h"
+#include "../Game.Models/ArrowsSuccessModel.h"
+
 using namespace std;
 using namespace System::Drawing;
 
 class ArrowsController {
 	vector<ArrowsModel> listArrowsColumn;
-
+	vector<ArrowsSuccessModel> listArrowsSuccess;
 private:
 	int posX = 0;
 	int yCol1 = 0, xCol1 = 0,
@@ -31,14 +33,15 @@ private:
 public:
 
 	ArrowsController(){}
+#pragma region Lluvia de flechas
 
 	//Alinear las flechas por columnbas en el eje X
-	void alignArrowsPositionX(Graphics ^ graphic, Image^ image) {
-		
+	void alignArrowsPositionX(Image^ image) {
+
 		for (int i = 0; i < 4; i++)
 		{
 			int posX = 30 + (i * 120);
-			ArrowsModel arrowModel = ArrowsModel(image, posX,0);
+			ArrowsModel arrowModel = ArrowsModel(image, posX, 0);
 			listArrowsColumn.push_back(arrowModel);
 
 		}
@@ -54,12 +57,13 @@ public:
 		return this->increaseSpeed;
 	}
 
+	// Lluvia de flechas
 	int moveArrows(Graphics^ graphic, Image^ image) {
 		speed++;
 		if (speed == 8) {
 			speed = 0;
 		}
-			
+
 		// COLUMNA 1
 		if (yCol1 >= 550) {
 			yCol1 = 0;
@@ -78,7 +82,7 @@ public:
 
 		if (outputArrowCol1 == true) {
 			yCol1 = yCol1 + getIncreaseSpeed();
-			listArrowsColumn[0].drawRandomArrowColumn(graphic, image, yCol1,idSpriteXCol1, idSpriteYCol1);
+			listArrowsColumn[0].drawRandomArrowColumn(graphic, image, yCol1, idSpriteXCol1, idSpriteYCol1);
 		}
 
 
@@ -147,8 +151,40 @@ public:
 			listArrowsColumn[3].drawRandomArrowColumn(graphic, image, yCol4, idSpriteXCol4, idSpriteYCol4);
 		}
 
+
 		//Retornamos el incremento por pixeles actual
 		return getIncreaseSpeed();
 	}
+
+#pragma endregion
+
+
+#pragma region Flechas de acertaciones
+
+	void alignSuccessArrow(Image^ image) {
+		for (int i = 0; i < 4; i++)
+		{
+			int posX = 0;
+			posX = 30 + (i * 120);
+			ArrowsSuccessModel arrowSuccessModel =  ArrowsSuccessModel(image,posX,550);
+			listArrowsSuccess.push_back(arrowSuccessModel);
+		}
+	}
+
+	void drawSuccessArrow(Graphics^ graphic, Image^ image) {
+
+			// Seleccionamos una flecha segun el Sprite del eje X
+			// En el eje Y del sprite lo dejamos en cero ya que solo contenemos solo una fila
+			// Las flechas varian segun la posicion del Eje X
+			listArrowsSuccess[0].drawSucccesArrow(graphic, image, this->idSpriteXCol1, 0);
+			listArrowsSuccess[1].drawSucccesArrow(graphic, image, this->idSpriteXCol2, 0);
+			listArrowsSuccess[2].drawSucccesArrow(graphic, image, this->idSpriteXCol3, 0);
+			listArrowsSuccess[3].drawSucccesArrow(graphic, image, this->idSpriteXCol4, 0);
+
+	}
+
+#pragma endregion
+
+	// Flechas de acertación
 
 };
