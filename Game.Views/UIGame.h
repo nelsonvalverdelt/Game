@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <time.h>
+#include "../Game.Controllers/ArrowsController.h";
 
 namespace GameViews {
 
@@ -23,6 +24,11 @@ namespace GameViews {
 		{
 
 			InitializeComponent();
+
+			background = gcnew Bitmap("background.png");
+			arrows = gcnew Bitmap("FlechasSprite.png");
+			arrowController = new ArrowsController();
+			graphic = this->CreateGraphics();
 			//
 			//TODO: agregar código de constructor aquí
 			//
@@ -33,22 +39,6 @@ namespace GameViews {
 			
 			// Inicializamos con random e inicializar con cualquier flecha dentro del rectangulo	
 			// Random de Sprits X y Y
-			idSpriteXRandomCol1 = rand() % 3;
-			idSpriteYRandomCol1 = rand() % 3;
-
-			idSpriteXRandomCol2 = rand() % 3;
-			idSpriteYRandomCol2 = rand() % 3;
-
-			idSpriteXRandomCol3 = rand() % 3;
-			idSpriteYRandomCol3 = rand() % 3;
-
-			idSpriteXRandomCol4 = rand() % 3;
-			idSpriteYRandomCol4 = rand() % 3;
-
-			randomOrder1 = 0;
-			randomOrder2 = 0;
-			randomOrder3 = 0;
-			randomOrder4 = 0;
 
 			speed = 0;
 
@@ -71,12 +61,20 @@ namespace GameViews {
 		}
 		// Variables de la aplicación
 	private: 
-		int idSpriteXCol1, idSpriteYCol1, xCol1, yCol1, idSpriteXRandomCol1, idSpriteYRandomCol1, randomOrder1;
-		int idSpriteXCol2, idSpriteYCol2, xCol2, yCol2, idSpriteXRandomCol2, idSpriteYRandomCol2, randomOrder2;
-		int idSpriteXCol3, idSpriteYCol3, xCol3, yCol3, idSpriteXRandomCol3, idSpriteYRandomCol3, randomOrder3;
-		int idSpriteXCol4, idSpriteYCol4, xCol4, yCol4, idSpriteXRandomCol4, idSpriteYRandomCol4, randomOrder4;
+		int idSpriteXCol1, idSpriteYCol1, xCol1, yCol1;
+		Bitmap^ background;
+		Bitmap ^ arrows;
+		Graphics ^ graphic;
+		BufferedGraphicsContext^ bufferedGraphicContext;
+		BufferedGraphics ^ bufferedGraphics;
+		ArrowsController* arrowController;
+
+		int idSpriteXCol2, idSpriteYCol2, xCol2, yCol2;
+		int idSpriteXCol3, idSpriteYCol3, xCol3, yCol3;
+		int idSpriteXCol4, idSpriteYCol4, xCol4, yCol4;
 		bool sCol1,sCol2,sCol3,sCol4;
-		int timer,speed;
+
+		int time=0,increaseSpeed=0,speed;
 
 	protected:
 
@@ -93,9 +91,9 @@ namespace GameViews {
 	private: System::Windows::Forms::Label^  lblSpeedText;
 
 	private: System::Windows::Forms::Label^  lblResultado;
-	private: System::Windows::Forms::PictureBox^  pictureBox2;
+
 	private: System::Windows::Forms::Timer^  timerArrows;
-	private: System::Windows::Forms::PictureBox^  pbArrows;
+
 
 
 
@@ -116,18 +114,13 @@ namespace GameViews {
 		void InitializeComponent(void)
 		{
 			this->components = (gcnew System::ComponentModel::Container());
-			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(UIGame::typeid));
 			this->lblTiempo = (gcnew System::Windows::Forms::Label());
 			this->timerGame = (gcnew System::Windows::Forms::Timer(this->components));
 			this->lblSpeed = (gcnew System::Windows::Forms::Label());
 			this->lblTimeText = (gcnew System::Windows::Forms::Label());
 			this->lblSpeedText = (gcnew System::Windows::Forms::Label());
 			this->lblResultado = (gcnew System::Windows::Forms::Label());
-			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
 			this->timerArrows = (gcnew System::Windows::Forms::Timer(this->components));
-			this->pbArrows = (gcnew System::Windows::Forms::PictureBox());
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pbArrows))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// lblTiempo
@@ -186,55 +179,26 @@ namespace GameViews {
 			this->lblResultado->TabIndex = 6;
 			this->lblResultado->Text = L"Resultado";
 			// 
-			// pictureBox2
-			// 
-			this->pictureBox2->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
-				| System::Windows::Forms::AnchorStyles::Left)
-				| System::Windows::Forms::AnchorStyles::Right));
-			this->pictureBox2->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Center;
-			this->pictureBox2->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox2.Image")));
-			this->pictureBox2->Location = System::Drawing::Point(37, 585);
-			this->pictureBox2->Name = L"pictureBox2";
-			this->pictureBox2->Size = System::Drawing::Size(525, 123);
-			this->pictureBox2->SizeMode = System::Windows::Forms::PictureBoxSizeMode::CenterImage;
-			this->pictureBox2->TabIndex = 1;
-			this->pictureBox2->TabStop = false;
-			// 
 			// timerArrows
 			// 
 			this->timerArrows->Enabled = true;
-			this->timerArrows->Interval = 5;
 			this->timerArrows->Tick += gcnew System::EventHandler(this, &UIGame::timerArrows_Tick);
-			// 
-			// pbArrows
-			// 
-			this->pbArrows->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pbArrows.Image")));
-			this->pbArrows->Location = System::Drawing::Point(59, 59);
-			this->pbArrows->Name = L"pbArrows";
-			this->pbArrows->Size = System::Drawing::Size(480, 480);
-			this->pbArrows->TabIndex = 7;
-			this->pbArrows->TabStop = false;
-			this->pbArrows->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &UIGame::pbArrows_Paint);
 			// 
 			// UIGame
 			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
 			this->BackColor = System::Drawing::Color::Black;
 			this->ClientSize = System::Drawing::Size(597, 744);
-			this->Controls->Add(this->pbArrows);
 			this->Controls->Add(this->lblResultado);
 			this->Controls->Add(this->lblSpeedText);
 			this->Controls->Add(this->lblTimeText);
 			this->Controls->Add(this->lblSpeed);
 			this->Controls->Add(this->lblTiempo);
-			this->Controls->Add(this->pictureBox2);
 			this->MaximizeBox = false;
 			this->Name = L"UIGame";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"UIGame";
 			this->Load += gcnew System::EventHandler(this, &UIGame::UIGame_Load);
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pbArrows))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -251,9 +215,17 @@ namespace GameViews {
 private: System::Void timerGame_Tick(System::Object^  sender, System::EventArgs^  e) {
 	
 	// Tiempo
-	timer++;
+	time++;
+	this->lblTiempo->Text = time + "";
 
-	lblTiempo->Text = timer + "";
+	//time = 1, porque no permite tomar desde 0 para el movimiento de flechas
+	if (time % 15 == 0 || time <= 1) {
+		// Aumentamos +4 Pixeles por cada 15 segundos
+		increaseSpeed +=4;
+		//Enviamos o steamos el incremento acumulado a nuestro controlador con el metodo setIncreaseSpeed(nueva velocidad por pixel)
+		arrowController->setIncreaseSpeed(increaseSpeed);
+	}
+	
 
 }
 
@@ -262,8 +234,18 @@ private: System::Void timerArrows_Tick(System::Object^  sender, System::EventArg
 
 	// Velocidad
 	speed++;
-	lblSpeed->Text = speed + "";
 
+
+	bufferedGraphicContext = BufferedGraphicsManager::Current;
+	bufferedGraphics = bufferedGraphicContext->Allocate(graphic, this->ClientRectangle);
+	bufferedGraphics->Graphics->DrawImage(background, 0, 0);
+
+	arrowController->alignArrowsPositionX(bufferedGraphics->Graphics, arrows);
+	int dato = arrowController->moveArrows(bufferedGraphics->Graphics, arrows);
+	lblSpeed->Text = dato + "";
+	bufferedGraphics->Render(graphic);
+
+	/*
 
 	Graphics^ graphic = this->CreateGraphics();
 
@@ -420,10 +402,10 @@ private: System::Void timerArrows_Tick(System::Object^  sender, System::EventArg
 	yCol4++;
 	}
 	
-
+	*/
 }
 private: System::Void pbArrows_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e) {
-	this->pbArrows->Visible = false;
+//	this->pbArrows->Visible = false;
 }
 };
 		 
