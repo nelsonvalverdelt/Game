@@ -24,7 +24,6 @@ public:
 		
 		// xCol va a ser un parámetro definido en el contructor y va a ser constante en el eje X
 		// yCol va a ser dinámico en el eje Y
-
 		graphic->DrawImage(image, this->xCol, yCol, rectangleVisible, GraphicsUnit::Pixel);
 	}
 

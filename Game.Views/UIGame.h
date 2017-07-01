@@ -1,7 +1,4 @@
 #pragma once
-
-#include <stdlib.h>
-#include <time.h>
 #include "../Game.Controllers/ArrowsController.h";
 
 namespace GameViews {
@@ -146,7 +143,7 @@ namespace GameViews {
 			// 
 			this->lblResultado->AutoSize = true;
 			this->lblResultado->BackColor = System::Drawing::Color::BlanchedAlmond;
-			this->lblResultado->Location = System::Drawing::Point(248, 13);
+			this->lblResultado->Location = System::Drawing::Point(428, 13);
 			this->lblResultado->Name = L"lblResultado";
 			this->lblResultado->Size = System::Drawing::Size(72, 17);
 			this->lblResultado->TabIndex = 6;
@@ -155,6 +152,7 @@ namespace GameViews {
 			// timerArrows
 			// 
 			this->timerArrows->Enabled = true;
+			this->timerArrows->Interval = 20;
 			this->timerArrows->Tick += gcnew System::EventHandler(this, &UIGame::timerArrows_Tick);
 			// 
 			// UIGame
@@ -171,6 +169,7 @@ namespace GameViews {
 			this->Name = L"UIGame";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"UIGame";
+			this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &UIGame::UIGame_KeyDown);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -185,10 +184,10 @@ private: System::Void timerGame_Tick(System::Object^  sender, System::EventArgs^
 	time++;
 	this->lblTiempo->Text = time + "";
 
-	//time = 1, porque no permite tomar desde 0 para el movimiento de flechas
+	//time <= 1, porque no permite tomar desde 0 para el movimiento de flechas
 	if (time % 15 == 0 || time <= 1) {
 		// Aumentamos +4 Pixeles por cada 15 segundos
-		increaseSpeed +=4;
+		increaseSpeed +=1;
 		//Enviamos o steamos el incremento acumulado a nuestro controlador con el metodo setIncreaseSpeed(nueva velocidad por pixel)
 		arrowController->setIncreaseSpeed(increaseSpeed);
 	}
@@ -198,9 +197,6 @@ private: System::Void timerGame_Tick(System::Object^  sender, System::EventArgs^
 
 private: System::Void timerArrows_Tick(System::Object^  sender, System::EventArgs^  e) {
 
-	// Velocidad
-	speed++;
-
 
 	bufferedGraphicContext = BufferedGraphicsManager::Current;
 	bufferedGraphics = bufferedGraphicContext->Allocate(graphic, this->ClientRectangle);
@@ -208,17 +204,59 @@ private: System::Void timerArrows_Tick(System::Object^  sender, System::EventArg
 
 	//LLuvia de flechas
 	arrowController->alignArrowsPositionX(arrows);
-	int dato = arrowController->moveArrows(bufferedGraphics->Graphics, arrows);
-	lblSpeed->Text = dato + "";
+	
+	
+	//int speed = arrowController->moveArrows(bufferedGraphics->Graphics, arrows);
+	arrowController->moveArrows(bufferedGraphics->Graphics, arrows);
+	//lblSpeed->Text = speed+ "";
+
+	
 
 	//Flechas inferior estática de exito
 	arrowController->alignSuccessArrow(successArrows);
 	arrowController->drawSuccessArrow(bufferedGraphics->Graphics, successArrows);
+	int result = arrowController->SuccessArrowUp();
+	if (result == 1) {
+		lblSpeed->Text = "Columna 1";
+	}
 
+	if (result == 2) {
+		lblSpeed->Text = "Columna 2";
+	}
+	if (result == 3) {
+		lblSpeed->Text = "Columna 3";
+	}
+	if (result == 4) {
+		lblSpeed->Text = "Columna 4";
+	}
 	bufferedGraphics->Render(graphic);
 
 }
 
+private: System::Void UIGame_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+	/*
+	switch (e->KeyCode)
+	{
+	case Keys::Up: int result = arrowController->SuceesArrowUp();
+		if (result == 1) {
+			lblSpeed->Text = "Columna 1";
+		}
+
+		if (result == 2) {
+			lblSpeed->Text = "Columna 2";
+		}
+		if (result == 3) {
+			lblSpeed->Text = "Columna 3";
+		}
+		if (result == 4) {
+			lblSpeed->Text = "Columna 4";
+		}
+
+	}
+	*/
+}
+		 
+		
 };
 		 
 }

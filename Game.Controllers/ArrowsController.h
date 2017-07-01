@@ -36,6 +36,7 @@ public:
 #pragma region Lluvia de flechas
 
 	//Alinear las flechas por columnbas en el eje X
+	// En el eje Y lo alineamos en posicion cero del plano
 	void alignArrowsPositionX(Image^ image) {
 
 		for (int i = 0; i < 4; i++)
@@ -60,24 +61,25 @@ public:
 	// Lluvia de flechas
 	int moveArrows(Graphics^ graphic, Image^ image) {
 		speed++;
-		if (speed == 8) {
+		if (speed == 30) {
 			speed = 0;
 		}
 
 		// COLUMNA 1
-		if (yCol1 >= 550) {
+		if (yCol1 >= 610) {
 			yCol1 = 0;
 			outputArrowCol1 = false;
-			idSpriteXCol1 = rand() % 3;
-			idSpriteYCol1 = rand() % 3;
+			idSpriteXCol1 = rand() % 4;
+			idSpriteYCol1 = rand() % 4;
 		}
 
 		if (yCol1 == 0) {
-			randomCol1 = rand() % 8 + 1;
+			randomCol1 = rand() % 30 + 1;
 		}
 
 		if (speed == randomCol1) {
 			outputArrowCol1 = true;
+			//Almacenar el Sprite con la direcció de la flecha
 		}
 
 		if (outputArrowCol1 == true) {
@@ -87,19 +89,20 @@ public:
 
 
 		// COLUMNA 2
-		if (yCol2 >= 550) {
+		if (yCol2 >= 610) {
 			yCol2 = 0;
 			outputArrowCol2 = false;
-			idSpriteXCol2 = rand() % 3;
-			idSpriteYCol2 = rand() % 3;
+			idSpriteXCol2 = rand() % 4;
+			idSpriteYCol2 = rand() % 4;
 		}
 
 		if (yCol2 == 0) {
-			randomCol2 = rand() % 8 + 1;
+			randomCol2 = rand() % 29 + 1;
 		}
 
 		if (speed == randomCol2) {
 			outputArrowCol2 = true;
+			//Almacenar el Sprite con la direcció de la flecha
 		}
 
 		if (outputArrowCol2 == true) {
@@ -109,19 +112,20 @@ public:
 
 
 		// COLUMNA 3
-		if (yCol3 >= 550) {
+		if (yCol3 >= 610) {
 			yCol3 = 0;
 			outputArrowCol3 = false;
-			idSpriteXCol3 = rand() % 3;
-			idSpriteYCol3 = rand() % 3;
+			idSpriteXCol3 = rand() % 4;
+			idSpriteYCol3 = rand() % 4;
 		}
 
 		if (yCol3 == 0) {
-			randomCol3 = rand() % 8 + 1;
+			randomCol3 = rand() % 29 + 1;
 		}
 
 		if (speed == randomCol3) {
 			outputArrowCol3 = true;
+			//Almacenar el Sprite con la direcció de la flecha
 		}
 
 		if (outputArrowCol3 == true) {
@@ -131,24 +135,26 @@ public:
 
 
 		// COLUMNA 4
-		if (yCol4 >= 550) {
+		if (yCol4 >= 610) {
 			yCol4 = 0;
 			outputArrowCol4 = false;
-			idSpriteXCol4 = rand() % 3;
-			idSpriteYCol4 = rand() % 3;
+			idSpriteXCol4 = rand() % 4;
+			idSpriteYCol4 = rand() % 4;
 		}
 
 		if (yCol4 == 0) {
-			randomCol4 = rand() % 8 + 1;
+			randomCol4 = rand() % 29 + 1;
 		}
 
 		if (speed == randomCol4) {
 			outputArrowCol4 = true;
+			//Almacenar el Sprite con la direcció de la flecha
 		}
 
 		if (outputArrowCol4 == true) {
 			yCol4 = yCol4 + getIncreaseSpeed();
 			listArrowsColumn[3].drawRandomArrowColumn(graphic, image, yCol4, idSpriteXCol4, idSpriteYCol4);
+			
 		}
 
 
@@ -158,6 +164,18 @@ public:
 
 #pragma endregion
 
+	int getCol1() {
+		return this->yCol1;
+	}
+	int getCol2() {
+		return this->yCol2;
+	}
+	int getCol3() {
+		return this->yCol3;
+	}
+	int getCol4() {
+		return this->yCol4;
+	}
 
 #pragma region Flechas de acertaciones
 
@@ -185,6 +203,97 @@ public:
 
 #pragma endregion
 
-	// Flechas de acertación
+#pragma region Acertacion
+
+	int SuccessArrowUp(int idSpriteX, int idSpriteY) {
+
+		char* color = new char[100];
+		if (idSpriteYCol1 == 0) {
+			color = "Flecha roja";
+		}
+		if (idSpriteYCol1 == 1) {
+			color = "Flecha Azul";
+		}
+		if (idSpriteYCol1 == 2) {
+			color = "Flecha Verde";
+		}
+		if (idSpriteYCol1 == 3) {
+			color = "Flecha Amarillo";
+		}
+
+		if (this->idSpriteXCol1 == 3) {
+
+
+		if (this->yCol1 > 540 && this->yCol1 < 560) {
+			//Entonces almacena el sprite X y Y para obtener el color y ladirección de la flecha
+				// Código aquí			
+				return 1;
+			}			
+		}
+
+		if (this->idSpriteXCol2 == 3) {
+		if (this->yCol2 > 540 && this->yCol2 < 560) {
+			//Entonces almacena el sprite X y Y para obtener el color y ladirección de la flecha
+			// Código aquí	
+				return 2;
+			}
+		}
+		if (this->idSpriteXCol3 == 3) {
+
+		if (this->yCol3 > 540 && this->yCol3 < 560) {
+			//Entonces almacena el sprite X y Y para obtener el color y ladirección de la flecha
+			// Código aquí		
+			return 3;
+			}
+		}
+
+		if (this->idSpriteXCol4 == 3) {
+		if (this->yCol4 > 540 && this->yCol4 < 560) {
+			//Entonces almacena el sprite X y Y para obtener el color y ladirección de la flecha
+			// Código aquí
+			return 4;
+			}
+		}
+
+		return 0;
+
+	}
+
+	bool SuceesArrowDown() {
+
+
+		if (this->yCol2 == 550) {
+			//Entonces almacena el sprite X y Y para obtener el color y ladirección de la flecha
+			// Código aquí
+			return true;
+		}
+		return false;
+	}
+	bool SuceesArrowLeft() {
+
+		if (this->yCol3 == 550) {
+			//Entonces almacena el sprite X y Y para obtener el color y ladirección de la flecha
+			// Código aquí
+
+			return true;
+		}
+		return false;
+
+	}
+	bool SuceesArrowRight() {
+
+
+		if (this->yCol4 == 550) {
+			//Entonces almacena el sprite X y Y para obtener el color y ladirección de la flecha
+			// Código aquí
+
+			return true;
+		}
+		return false;
+
+	}
+	
+#pragma endregion
+
 
 };
