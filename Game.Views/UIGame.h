@@ -1,5 +1,5 @@
 #pragma once
-#include "../Game.Controllers/ArrowsController.h";
+#include "../Game.Views/ArrowsController.h";
 
 namespace GameViews {
 
@@ -32,6 +32,9 @@ namespace GameViews {
 			//TODO: agregar código de constructor aquí
 
 			speed = 0;
+			bufferedGraphicContext = BufferedGraphicsManager::Current;
+			bufferedGraphics = bufferedGraphicContext->Allocate(graphic, this->ClientRectangle);
+		
 
 		}
 
@@ -57,7 +60,9 @@ namespace GameViews {
 		ArrowsController* arrowController;
 
 		int time=0,increaseSpeed=0,speed;
-
+		int cont = 0;
+		int outputArrowsCol1 = 0, outputArrowsCol2 = 0, outputArrowsCol3 = 0, outputArrowsCol4 = 0;
+		int countHitCol1 = 0;
 	protected:
 
 	private: System::Windows::Forms::Label^  lblTiempo;
@@ -67,6 +72,14 @@ namespace GameViews {
 	private: System::Windows::Forms::Label^  lblSpeedText;
 	private: System::Windows::Forms::Label^  lblResultado;
 	private: System::Windows::Forms::Timer^  timerArrows;
+	private: System::Windows::Forms::Label^  lblRojo;
+	private: System::Windows::Forms::Label^  lblAzul;
+	private: System::Windows::Forms::Label^  lblAmarilla;
+	private: System::Windows::Forms::Label^  lblVerde;
+	private: System::Windows::Forms::Label^  lblIzquierda;
+	private: System::Windows::Forms::Label^  lblArriba;
+	private: System::Windows::Forms::Label^  lblAbajo;
+	private: System::Windows::Forms::Label^  lblDerecha;
 	private: System::ComponentModel::IContainer^  components;
 	protected:
 
@@ -91,6 +104,14 @@ namespace GameViews {
 			this->lblSpeedText = (gcnew System::Windows::Forms::Label());
 			this->lblResultado = (gcnew System::Windows::Forms::Label());
 			this->timerArrows = (gcnew System::Windows::Forms::Timer(this->components));
+			this->lblRojo = (gcnew System::Windows::Forms::Label());
+			this->lblAzul = (gcnew System::Windows::Forms::Label());
+			this->lblAmarilla = (gcnew System::Windows::Forms::Label());
+			this->lblVerde = (gcnew System::Windows::Forms::Label());
+			this->lblIzquierda = (gcnew System::Windows::Forms::Label());
+			this->lblArriba = (gcnew System::Windows::Forms::Label());
+			this->lblAbajo = (gcnew System::Windows::Forms::Label());
+			this->lblDerecha = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
 			// lblTiempo
@@ -152,14 +173,104 @@ namespace GameViews {
 			// timerArrows
 			// 
 			this->timerArrows->Enabled = true;
-			this->timerArrows->Interval = 20;
+			this->timerArrows->Interval = 1;
 			this->timerArrows->Tick += gcnew System::EventHandler(this, &UIGame::timerArrows_Tick);
+			// 
+			// lblRojo
+			// 
+			this->lblRojo->AutoSize = true;
+			this->lblRojo->ForeColor = System::Drawing::Color::White;
+			this->lblRojo->Location = System::Drawing::Point(504, 102);
+			this->lblRojo->Name = L"lblRojo";
+			this->lblRojo->Size = System::Drawing::Size(44, 17);
+			this->lblRojo->TabIndex = 7;
+			this->lblRojo->Text = L"Rojas";
+			// 
+			// lblAzul
+			// 
+			this->lblAzul->AutoSize = true;
+			this->lblAzul->ForeColor = System::Drawing::Color::White;
+			this->lblAzul->Location = System::Drawing::Point(507, 148);
+			this->lblAzul->Name = L"lblAzul";
+			this->lblAzul->Size = System::Drawing::Size(50, 17);
+			this->lblAzul->TabIndex = 8;
+			this->lblAzul->Text = L"Azules";
+			// 
+			// lblAmarilla
+			// 
+			this->lblAmarilla->AutoSize = true;
+			this->lblAmarilla->ForeColor = System::Drawing::Color::White;
+			this->lblAmarilla->Location = System::Drawing::Point(507, 196);
+			this->lblAmarilla->Name = L"lblAmarilla";
+			this->lblAmarilla->Size = System::Drawing::Size(65, 17);
+			this->lblAmarilla->TabIndex = 9;
+			this->lblAmarilla->Text = L"Amarillas";
+			// 
+			// lblVerde
+			// 
+			this->lblVerde->AutoSize = true;
+			this->lblVerde->ForeColor = System::Drawing::Color::White;
+			this->lblVerde->Location = System::Drawing::Point(510, 247);
+			this->lblVerde->Name = L"lblVerde";
+			this->lblVerde->Size = System::Drawing::Size(53, 17);
+			this->lblVerde->TabIndex = 10;
+			this->lblVerde->Text = L"Verdes";
+			// 
+			// lblIzquierda
+			// 
+			this->lblIzquierda->AutoSize = true;
+			this->lblIzquierda->BackColor = System::Drawing::Color::Black;
+			this->lblIzquierda->ForeColor = System::Drawing::Color::White;
+			this->lblIzquierda->Location = System::Drawing::Point(74, 34);
+			this->lblIzquierda->Name = L"lblIzquierda";
+			this->lblIzquierda->Size = System::Drawing::Size(66, 17);
+			this->lblIzquierda->TabIndex = 11;
+			this->lblIzquierda->Text = L"izquierda";
+			// 
+			// lblArriba
+			// 
+			this->lblArriba->AutoSize = true;
+			this->lblArriba->ForeColor = System::Drawing::Color::White;
+			this->lblArriba->Location = System::Drawing::Point(208, 34);
+			this->lblArriba->Name = L"lblArriba";
+			this->lblArriba->Size = System::Drawing::Size(45, 17);
+			this->lblArriba->TabIndex = 12;
+			this->lblArriba->Text = L"arriba";
+			// 
+			// lblAbajo
+			// 
+			this->lblAbajo->AutoSize = true;
+			this->lblAbajo->ForeColor = System::Drawing::Color::White;
+			this->lblAbajo->Location = System::Drawing::Point(337, 34);
+			this->lblAbajo->Name = L"lblAbajo";
+			this->lblAbajo->Size = System::Drawing::Size(43, 17);
+			this->lblAbajo->TabIndex = 13;
+			this->lblAbajo->Text = L"abajo";
+			// 
+			// lblDerecha
+			// 
+			this->lblDerecha->AutoSize = true;
+			this->lblDerecha->BackColor = System::Drawing::Color::Black;
+			this->lblDerecha->ForeColor = System::Drawing::Color::White;
+			this->lblDerecha->Location = System::Drawing::Point(440, 34);
+			this->lblDerecha->Name = L"lblDerecha";
+			this->lblDerecha->Size = System::Drawing::Size(60, 17);
+			this->lblDerecha->TabIndex = 14;
+			this->lblDerecha->Text = L"derecha";
 			// 
 			// UIGame
 			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
 			this->BackColor = System::Drawing::Color::Black;
 			this->ClientSize = System::Drawing::Size(597, 744);
+			this->Controls->Add(this->lblDerecha);
+			this->Controls->Add(this->lblAbajo);
+			this->Controls->Add(this->lblArriba);
+			this->Controls->Add(this->lblIzquierda);
+			this->Controls->Add(this->lblVerde);
+			this->Controls->Add(this->lblAmarilla);
+			this->Controls->Add(this->lblAzul);
+			this->Controls->Add(this->lblRojo);
 			this->Controls->Add(this->lblResultado);
 			this->Controls->Add(this->lblSpeedText);
 			this->Controls->Add(this->lblTimeText);
@@ -178,85 +289,68 @@ namespace GameViews {
 
 
 
-private: System::Void timerGame_Tick(System::Object^  sender, System::EventArgs^  e) {
-	
-	// Tiempo
-	time++;
-	this->lblTiempo->Text = time + "";
-
-	//time <= 1, porque no permite tomar desde 0 para el movimiento de flechas
-	if (time % 15 == 0 || time <= 1) {
-		// Aumentamos +4 Pixeles por cada 15 segundos
-		increaseSpeed +=1;
-		//Enviamos o steamos el incremento acumulado a nuestro controlador con el metodo setIncreaseSpeed(nueva velocidad por pixel)
-		arrowController->setIncreaseSpeed(increaseSpeed);
-	}
-
+	private: System::Void timerGame_Tick(System::Object^  sender, System::EventArgs^  e) {
+		// Tiempo
+		time = time + 1;
+		this->lblTiempo->Text = time + "";
 }
 
+	private: System::Void timerArrows_Tick(System::Object^  sender, System::EventArgs^  e) {
 
-private: System::Void timerArrows_Tick(System::Object^  sender, System::EventArgs^  e) {
+		speed = speed + 5;
+		this->lblSpeed->Text = speed + "";
 
+		if (time <= 60) {
+			bufferedGraphics->Graphics->DrawImage(background, 0, 0);
 
-	bufferedGraphicContext = BufferedGraphicsManager::Current;
-	bufferedGraphics = bufferedGraphicContext->Allocate(graphic, this->ClientRectangle);
-	bufferedGraphics->Graphics->DrawImage(background, 0, 0);
+			if (speed % 120 == 0) {
 
-	//LLuvia de flechas
-	arrowController->alignArrowsPositionX(arrows);
+				outputArrowsCol1 = rand() % 2;
+				outputArrowsCol2 = rand() % 2;
+				outputArrowsCol3 = rand() % 2;
+				outputArrowsCol4 = rand() % 2;
+
+				if (outputArrowsCol1 == 1 && outputArrowsCol2 == 0 && outputArrowsCol3 == 0 && outputArrowsCol4 == 0) {
+					arrowController->alignArrowsPositionX(arrows, 1);
+				}
+				if (outputArrowsCol2 == 1 && outputArrowsCol1 == 0 && outputArrowsCol3 == 0 && outputArrowsCol4 == 0) {
+					arrowController->alignArrowsPositionX(arrows, 2);
+				}
+				if (outputArrowsCol3 == 1 && outputArrowsCol1 == 0 && outputArrowsCol2 == 0 && outputArrowsCol4 == 0) {
+					arrowController->alignArrowsPositionX(arrows, 3);
+				}
+				if (outputArrowsCol4 == 1 && outputArrowsCol3 == 0 && outputArrowsCol1 == 0 && outputArrowsCol2 == 0) {
+					arrowController->alignArrowsPositionX(arrows, 4);
+				}
+
+			}
+			if (time == 60 ) {
+				arrowController->guardarJuego();
+			}
+			arrowController->ArrowsRainColumn1(bufferedGraphics->Graphics, arrows);
+			arrowController->ArrowsRainColumn2(bufferedGraphics->Graphics, arrows);
+			arrowController->ArrowsRainColumn3(bufferedGraphics->Graphics, arrows);
+			arrowController->ArrowsRainColumn4(bufferedGraphics->Graphics, arrows);
+
+			//flechas inferiores
+			arrowController->alignArrowsSuccess(bufferedGraphics->Graphics, successArrows);
+			bufferedGraphics->Render(graphic);
+
+		}
+		
 	
-	
-	//int speed = arrowController->moveArrows(bufferedGraphics->Graphics, arrows);
-	arrowController->moveArrows(bufferedGraphics->Graphics, arrows);
-	//lblSpeed->Text = speed+ "";
-
-	
-
-	//Flechas inferior estática de exito
-	arrowController->alignSuccessArrow(successArrows);
-	arrowController->drawSuccessArrow(bufferedGraphics->Graphics, successArrows);
-	int result = arrowController->SuccessArrowUp();
-	if (result == 1) {
-		lblSpeed->Text = "Columna 1";
-	}
-
-	if (result == 2) {
-		lblSpeed->Text = "Columna 2";
-	}
-	if (result == 3) {
-		lblSpeed->Text = "Columna 3";
-	}
-	if (result == 4) {
-		lblSpeed->Text = "Columna 4";
-	}
-	bufferedGraphics->Render(graphic);
-
 }
 
 private: System::Void UIGame_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-	/*
-	switch (e->KeyCode)
-	{
-	case Keys::Up: int result = arrowController->SuceesArrowUp();
-		if (result == 1) {
-			lblSpeed->Text = "Columna 1";
-		}
 
-		if (result == 2) {
-			lblSpeed->Text = "Columna 2";
-		}
-		if (result == 3) {
-			lblSpeed->Text = "Columna 3";
-		}
-		if (result == 4) {
-			lblSpeed->Text = "Columna 4";
-		}
-
+	switch (e->KeyCode) {
+	case Keys::Up: this->arrowController->SuceesArrowsUp(time); break;
+	case Keys::Down: this->arrowController->SuceesArrowsDown(time);
+					 break;
+		case Keys::Left: this->arrowController->SuceesArrowsLeft(time); break;
+		case Keys::Right: this->arrowController->SuceesArrowsRight(time); break;
 	}
-	*/
 }
-		 
-		
 };
 		 
 }
