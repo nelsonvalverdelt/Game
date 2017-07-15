@@ -66,7 +66,9 @@ public:
 	int getSpriteY() {
 		return this->idSpriteY;
 	}
-
+	int getSpriteX() {
+		return this->idSpriteX;
+	}
 
 	void drawColumn(Graphics^ graphic, Image ^ image) {
 

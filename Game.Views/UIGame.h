@@ -293,6 +293,9 @@ namespace GameViews {
 		// Tiempo
 		time = time + 1;
 		this->lblTiempo->Text = time + "";
+		if (time == 60) {
+			arrowController->guardarJuego();
+		}
 }
 
 	private: System::Void timerArrows_Tick(System::Object^  sender, System::EventArgs^  e) {
@@ -324,9 +327,7 @@ namespace GameViews {
 				}
 
 			}
-			if (time == 60 ) {
-				arrowController->guardarJuego();
-			}
+			
 			arrowController->ArrowsRainColumn1(bufferedGraphics->Graphics, arrows);
 			arrowController->ArrowsRainColumn2(bufferedGraphics->Graphics, arrows);
 			arrowController->ArrowsRainColumn3(bufferedGraphics->Graphics, arrows);

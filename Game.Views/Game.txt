@@ -1,0 +1,34 @@
+Posición     Entrada     Dirección     Color       Acierto        Tiempo
+
+   0             Si        izquierda    rojo           Si            41
+   0             Si        arriba       azul           Si            53
+   0             Si        abajo        amarillo       No            0
+   1             Si        abajo        amarillo       No            0
+   2             Si        abajo        rojo           Si            32
+   3             Si        abajo        rojo           Si            43
+   4             Si        abajo        amarillo       Si            49
+   0             Si        derecha      verde          No            0
+   1             Si        derecha      verde          Si            57
+   2             Si        derecha      verde          Si            59
+   3             No        derecha      amarillo       No            0
+   4             No        derecha      azul           No            0
+   5             No        derecha      rojo           No            0
+   6             No        derecha      rojo           No            0
+   7             No        derecha      amarillo       No            0
+   0             Si        izquierda    verde          No            0
+   1             Si        izquierda    amarillo       No            0
+   2             Si        izquierda    verde          No            0
+   3             No        izquierda    verde          No            0
+   0             Si        arriba       azul           No            0
+   1             Si        arriba       amarillo       No            0
+   2             No        arriba       verde          No            0
+   3             No        arriba       rojo           No            0
+   0             Si        abajo        azul           No            0
+   1             Si        abajo        rojo           No            0
+   2             Si        abajo        azul           No            0
+   3             No        abajo        verde          No            0
+   4             No        abajo        amarillo       No            0
+   0             Si        derecha      azul           No            0
+   1             Si        derecha      azul           No            0
+   2             No        derecha      rojo           No            0
+   3             No        derecha      verde          No            0

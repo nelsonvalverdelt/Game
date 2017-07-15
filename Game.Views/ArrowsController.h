@@ -5,6 +5,7 @@
 #include "../Game.Views/ArrowsModel.h"
 #include "../Game.Views/ArrowsSuccessModel.h"
 #include <fstream>
+#include <iostream>
 using namespace std;
 using namespace System::Drawing;
 
@@ -35,9 +36,11 @@ private:
 	int countArrowColumn1 = 0, countArrowColumn2 = 0, countArrowColumn3 = 0, countArrowColumn4 = 0;
 
 	int indice = 0;
+	int cont = 0;
 public:
 
 	ArrowsController() {}
+
 #pragma region Lluvia de flechas
 
 	//Alinear las flechas por columnbas en el eje X
@@ -143,7 +146,6 @@ public:
 
 #pragma endregion
 
-
 #pragma region Flechas Inferiores Estáticas 
 
 	void alignArrowsSuccess(Graphics^ graphic, Image^ image) {
@@ -158,11 +160,11 @@ public:
 	}
 #pragma endregion
 
-
+#pragma region Acertación de flechas
 	void SuceesArrowsLeft(int time) {
 		//Verificamos si posición excede de la cantidad total de elementos almacenados en el vector
 		if (countArrowColumn1 < listArrowsColumn1.size()) {
-			
+
 			// Intercalo  de aceptación al presionar la flecha
 			if (listArrowsColumn1[countArrowColumn1].getColY() > 530 && listArrowsColumn1[countArrowColumn1].getColY() < 570) {
 				listArrowsColumn1[countArrowColumn1].setColY(770);
@@ -185,25 +187,25 @@ public:
 			}
 		}
 	}
-	
+
 	void SuceesArrowsDown(int time) {
 
 		//Verificamos si posición excede de la cantidad total de elementos almacenados en el vector
-			if (countArrowColumn3 < listArrowsColumn3.size()) {
+		if (countArrowColumn3 < listArrowsColumn3.size()) {
 
-				// Intercalo  de aceptación al presionar la flecha
-				if (listArrowsColumn3[countArrowColumn3].getColY() > 530 && listArrowsColumn3[countArrowColumn3].getColY() < 570) {
+			// Intercalo  de aceptación al presionar la flecha
+			if (listArrowsColumn3[countArrowColumn3].getColY() > 530 && listArrowsColumn3[countArrowColumn3].getColY() < 570) {
 
-					listArrowsColumn3[countArrowColumn3].setColY(770);
-					listArrowsColumn3[countArrowColumn3].setHit(true);
-					listArrowsColumn3[countArrowColumn3].setTime(time);
-					// indicamos que la flecha pasó
+				listArrowsColumn3[countArrowColumn3].setColY(770);
+				listArrowsColumn3[countArrowColumn3].setHit(true);
+				listArrowsColumn3[countArrowColumn3].setTime(time);
+				// indicamos que la flecha pasó
 			}
 		}
-	
-	
 
-		
+
+
+
 	}
 
 	void SuceesArrowsRight(int time) {
@@ -221,44 +223,110 @@ public:
 	}
 
 
+#pragma endregion
 
 #pragma region Guardar Datos Jugador
 
 	void guardarJuego() {
-		ofstream game;
-		game.open("Game.txt");
-		//game << "La lista de Pokebolas actual son:" << lista.size() << "\n";
-		game << "Posición        Sprite        Acierto          Tiempo          Entrada\n";
-		for (int i = 0; i < listArrowsColumn3.size(); i++) {
+		ofstream writeGame;
+		writeGame.open("Game.txt", ios::app);
+		//writeGame << "Posición     Entrada     Dirección     Color       Acierto        Tiempo\n";
 
-				bool inputArrow = listArrowsColumn3[i].getInputArrow();
+		for (int i = 0; i < listArrowsColumn1.size(); i++) {
+			string inputArrow = validateInputArrow(listArrowsColumn1[i].getInputArrow());
+			string color = validateColor(listArrowsColumn1[i].getSpriteY());
+			string hit = validateHit(listArrowsColumn1[i].getHit());
+			string arrow = validateArrow(listArrowsColumn1[i].getSpriteX());
+			int time = listArrowsColumn1[i].getTime();
+
+			writeGame << "   " << i;
+			writeGame << "             " << inputArrow.c_str();
+			writeGame << "        " << arrow.c_str();
+			writeGame << "    " << color.c_str();
+			writeGame << "       " << hit.c_str();
+			writeGame << "            " << time << "\n";
+		}
+		for (int i = 0; i < listArrowsColumn2.size(); i++) {
+			string inputArrow = validateInputArrow(listArrowsColumn2[i].getInputArrow());
+			string color = validateColor(listArrowsColumn2[i].getSpriteY());
+			string hit = validateHit(listArrowsColumn2[i].getHit());
+			string arrow = validateArrow(listArrowsColumn2[i].getSpriteX());
+			int time = listArrowsColumn2[i].getTime();
+
+			writeGame << "   " << i;
+			writeGame << "             " << inputArrow.c_str();
+			writeGame << "        " << arrow.c_str();
+			writeGame << "    " << color.c_str();
+			writeGame << "       " << hit.c_str();
+			writeGame << "            " << time << "\n";
+		}
+
+
+		for (int i = 0; i < listArrowsColumn3.size(); i++) {
+				string inputArrow = validateInputArrow(listArrowsColumn3[i].getInputArrow());
 				string color = validateColor(listArrowsColumn3[i].getSpriteY());
 				string hit = validateHit(listArrowsColumn3[i].getHit());
+				string arrow = validateArrow(listArrowsColumn3[i].getSpriteX());
 				int time = listArrowsColumn3[i].getTime();
 
-				game << "   " << i << "   ";
-				game << "         " << color.c_str();
-				game << "          " << hit.c_str();
-				game << "          " << time;
-				game << "          " << inputArrow << "\n";
-			
+				writeGame << "   " << i;
+				writeGame << "             " << inputArrow.c_str();
+				writeGame << "        " << arrow.c_str();
+				writeGame << "    " << color.c_str();
+				writeGame << "       " << hit.c_str();
+				writeGame << "            " << time <<"\n";
 		}
+
+		for (int i = 0; i < listArrowsColumn4.size(); i++) {
+			string inputArrow = validateInputArrow(listArrowsColumn4[i].getInputArrow());
+			string color = validateColor(listArrowsColumn4[i].getSpriteY());
+			string hit = validateHit(listArrowsColumn4[i].getHit());
+			string arrow = validateArrow(listArrowsColumn4[i].getSpriteX());
+			int time = listArrowsColumn4[i].getTime();
+
+			writeGame << "   " << i;
+			writeGame << "             " << inputArrow.c_str();
+			writeGame << "        " << arrow.c_str();
+			writeGame << "    " << color.c_str();
+			writeGame << "       " << hit.c_str();
+			writeGame << "            " << time << "\n";
+		}
+		writeGame.close();
 	}
+
 
 #pragma endregion
 
 #pragma region Validaciones
 
+
+
+	string validateArrow(int idSpriteX) {
+		// Obtenemos la dirección de la flecha
+		// Las direcciones se agregaron en el constructor en un orden en específico
+
+		// Los espacios sirven para alinearlos por espacios en el reporte
+		switch (idSpriteX)
+		{
+		case 2: return "izquierda"; break;
+		case 3: return "arriba   "; break;
+		case 1: return "abajo    "; break;
+		case 0: return "derecha  "; break;
+		}
+	}
+
 	string validateColor(int idSpriteY) {
 	
+		// Los espacios sirven para alinearlos por espacios en el reporte
 		switch (idSpriteY)
 		{
-		case 0: return "rojo"; break;
-		case 1: return "azul"; break;
-		case 2: return "verde"; break;
+		case 0: return "rojo    "; break;
+		case 1: return "azul    "; break;
+		case 2: return "verde   "; break;
 		case 3: return "amarillo"; break;
 		}
 	}
+
 
 	string validateHit(bool hit) {
 		switch (hit)
@@ -267,6 +335,15 @@ public:
 		case true: return "Si";
 		}
 	}
+
+	string validateInputArrow(int inputArrow) {
+		switch (inputArrow)
+		{
+		case false: return "No";
+		case true: return "Si";
+		}
+	}
+
 
 
 #pragma endregion
