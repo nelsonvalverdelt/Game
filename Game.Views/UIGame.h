@@ -571,7 +571,6 @@ namespace GameViews {
 			//Eliminamos los datos
 			this->lblFinalizar->Visible = true;
 			player->Stop();
-			restartGame();
 			
 		}
 		if (time == 0) {
@@ -683,6 +682,9 @@ private: System::Void btnJugar_Click(System::Object^  sender, System::EventArgs^
 
 		//Escondemos Mensaje Finalizado
 		this->lblFinalizar->Visible = false;
+
+		//Reiniciamos el juego en caso que los resultados esten con  datos
+		restartGame();
 	}
 
 }
