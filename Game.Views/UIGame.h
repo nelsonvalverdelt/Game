@@ -1,5 +1,7 @@
 #pragma once
 #include "../Game.Views/ArrowsController.h";
+#include <Windows.h>
+#include <mmsystem.h>
 #include <msclr\marshal_cppstd.h>
 #include <stdlib.h>
 #include <string>
@@ -29,7 +31,11 @@ namespace GameViews {
 			InitializeComponent();
 			timerGame->Enabled = false;
 			timerArrows->Enabled = false;
-		
+			//Instanciamos para reproducir objetos multimedia
+			player = gcnew SoundPlayer();
+			player->SoundLocation = "Music/Faded-Alan_Walker.wav";
+			player->Load();
+			
 			
 			background = gcnew Bitmap("backgroundGame.png");
 			arrows = gcnew Bitmap("FlechasSprite.png");
@@ -60,7 +66,7 @@ namespace GameViews {
 		}
 		// Variables de la aplicación
 	private: 
-		//User^ user;
+		SoundPlayer^ player;
 		Bitmap^ background;
 		Bitmap ^ arrows;
 		Bitmap ^ successArrows;
@@ -71,20 +77,10 @@ namespace GameViews {
 		int time=0,speed;
 		int outputArrowsCol1 = 0, outputArrowsCol2 = 0, outputArrowsCol3 = 0, outputArrowsCol4 = 0;
 	protected:
-
 	private: System::Windows::Forms::Label^  lblTiempo;
 	private: System::Windows::Forms::Timer^  timerGame;
-
-
-
 	private: System::Windows::Forms::Label^  lblUser;
-
-
 	private: System::Windows::Forms::Timer^  timerArrows;
-
-
-
-
 	private: System::Windows::Forms::Label^  lblIzquierda;
 	private: System::Windows::Forms::Label^  lblArriba;
 	private: System::Windows::Forms::Label^  lblAbajo;
@@ -99,24 +95,22 @@ namespace GameViews {
 	private: System::Windows::Forms::Label^  lblTotalAbajo;
 	private: System::Windows::Forms::Label^  lblTotalArriba;
 	private: System::Windows::Forms::Label^  lblTotalIzquierda;
-
 	private: System::Windows::Forms::Label^  label4;
 	private: System::Windows::Forms::Label^  label3;
 	private: System::Windows::Forms::Label^  label2;
 	private: System::Windows::Forms::Label^  label1;
 	private: System::Windows::Forms::Label^  lblTotalAciertoDerecha;
-
 	private: System::Windows::Forms::Label^  lblTotalAciertoAbajo;
-
 	private: System::Windows::Forms::Label^  lblTotalAciertoArriba;
-
 	private: System::Windows::Forms::Label^  lblTotalAciertoIzquierda;
-
 	private: System::Windows::Forms::Label^  label9;
 	private: System::Windows::Forms::Label^  label6;
 	private: System::Windows::Forms::Label^  label8;
 	private: System::Windows::Forms::Label^  label7;
-
+	private: System::Windows::Forms::Label^  lblPausa;
+	private: System::Windows::Forms::Label^  label5;
+	private: System::Windows::Forms::Label^  lblPoints;
+	private: System::Windows::Forms::Label^  label10;
 	private: System::ComponentModel::IContainer^  components;
 	protected:
 
@@ -164,6 +158,10 @@ namespace GameViews {
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->lblFinalizar = (gcnew System::Windows::Forms::Label());
+			this->lblPausa = (gcnew System::Windows::Forms::Label());
+			this->label5 = (gcnew System::Windows::Forms::Label());
+			this->lblPoints = (gcnew System::Windows::Forms::Label());
+			this->label10 = (gcnew System::Windows::Forms::Label());
 			this->panel1->SuspendLayout();
 			this->gbAciertos->SuspendLayout();
 			this->gbSalida->SuspendLayout();
@@ -172,12 +170,12 @@ namespace GameViews {
 			// lblTiempo
 			// 
 			this->lblTiempo->AutoSize = true;
-			this->lblTiempo->Font = (gcnew System::Drawing::Font(L"Kristen ITC", 22.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->lblTiempo->Font = (gcnew System::Drawing::Font(L"Kristen ITC", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->lblTiempo->ForeColor = System::Drawing::Color::White;
-			this->lblTiempo->Location = System::Drawing::Point(260, 9);
+			this->lblTiempo->Location = System::Drawing::Point(473, 9);
 			this->lblTiempo->Name = L"lblTiempo";
-			this->lblTiempo->Size = System::Drawing::Size(46, 52);
+			this->lblTiempo->Size = System::Drawing::Size(36, 42);
 			this->lblTiempo->TabIndex = 2;
 			this->lblTiempo->Text = L"0";
 			// 
@@ -193,7 +191,7 @@ namespace GameViews {
 			this->lblUser->BackColor = System::Drawing::Color::Transparent;
 			this->lblUser->Font = (gcnew System::Drawing::Font(L"Kristen ITC", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblUser->ForeColor = System::Drawing::Color::LimeGreen;
+			this->lblUser->ForeColor = System::Drawing::Color::Lime;
 			this->lblUser->Location = System::Drawing::Point(21, 61);
 			this->lblUser->Name = L"lblUser";
 			this->lblUser->Size = System::Drawing::Size(95, 28);
@@ -476,11 +474,63 @@ namespace GameViews {
 			this->lblFinalizar->Text = L"Juego Finalizado";
 			this->lblFinalizar->Visible = false;
 			// 
+			// lblPausa
+			// 
+			this->lblPausa->AutoSize = true;
+			this->lblPausa->Font = (gcnew System::Drawing::Font(L"Kristen ITC", 22.2F));
+			this->lblPausa->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(192)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
+				static_cast<System::Int32>(static_cast<System::Byte>(255)));
+			this->lblPausa->Location = System::Drawing::Point(233, 379);
+			this->lblPausa->Name = L"lblPausa";
+			this->lblPausa->Size = System::Drawing::Size(134, 52);
+			this->lblPausa->TabIndex = 19;
+			this->lblPausa->Text = L"Pausa";
+			this->lblPausa->Visible = false;
+			// 
+			// label5
+			// 
+			this->label5->AutoSize = true;
+			this->label5->Font = (gcnew System::Drawing::Font(L"Kristen ITC", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label5->ForeColor = System::Drawing::Color::Lime;
+			this->label5->Location = System::Drawing::Point(25, 9);
+			this->label5->Name = L"label5";
+			this->label5->Size = System::Drawing::Size(131, 42);
+			this->label5->TabIndex = 20;
+			this->label5->Text = L"Puntos:";
+			// 
+			// lblPoints
+			// 
+			this->lblPoints->AutoSize = true;
+			this->lblPoints->Font = (gcnew System::Drawing::Font(L"Kristen ITC", 18));
+			this->lblPoints->ForeColor = System::Drawing::Color::White;
+			this->lblPoints->Location = System::Drawing::Point(162, 9);
+			this->lblPoints->Name = L"lblPoints";
+			this->lblPoints->Size = System::Drawing::Size(36, 42);
+			this->lblPoints->TabIndex = 21;
+			this->lblPoints->Text = L"0";
+			// 
+			// label10
+			// 
+			this->label10->AutoSize = true;
+			this->label10->BackColor = System::Drawing::Color::Transparent;
+			this->label10->Font = (gcnew System::Drawing::Font(L"Kristen ITC", 18));
+			this->label10->ForeColor = System::Drawing::Color::Lime;
+			this->label10->Location = System::Drawing::Point(331, 9);
+			this->label10->Name = L"label10";
+			this->label10->Size = System::Drawing::Size(134, 42);
+			this->label10->TabIndex = 22;
+			this->label10->Text = L"Tiempo:";
+			// 
 			// UIGame
 			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
 			this->BackColor = System::Drawing::Color::Black;
 			this->ClientSize = System::Drawing::Size(712, 744);
+			this->Controls->Add(this->label10);
+			this->Controls->Add(this->lblPoints);
+			this->Controls->Add(this->label5);
+			this->Controls->Add(this->lblPausa);
 			this->Controls->Add(this->lblFinalizar);
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->lblDerecha);
@@ -491,7 +541,7 @@ namespace GameViews {
 			this->MaximizeBox = false;
 			this->Name = L"UIGame";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-			this->Text = L"UIGame";
+			this->Text = L".:: JUEGO DE FLECHAS ::. NELSON VALVERDE LA TORRE";
 			this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &UIGame::UIGame_KeyDown);
 			this->panel1->ResumeLayout(false);
 			this->panel1->PerformLayout();
@@ -520,10 +570,12 @@ namespace GameViews {
 			this->txtUser->Enabled = true;
 			//Eliminamos los datos
 			this->lblFinalizar->Visible = true;
+			player->Stop();
+			restartGame();
 			
 		}
 		if (time == 0) {
-			arrowController->deleteElemtVector();
+			arrowController->deleteElementtVector();
 	
 		}
 
@@ -576,12 +628,7 @@ namespace GameViews {
 			this->lblTotalAbajo->Text = arrowController->getCountArrowsColumn(3) + "";
 			this->lblTotalDerecha->Text = arrowController->getCountArrowsColumn(4) + "";
 
-			//Total Salidas de Flechas en GroupBox Aciertos
-
-		
-			//this->lblTotalAciertoArriba->Text = arrowController->getCountSuccessArrowsColumn(2) + "";
-			//this->lblTotalAciertoAbajo->Text = arrowController->getCountSuccessArrowsColumn(3) + "";
-			//this->lblTotalAciertoDerecha->Text = arrowController->getCountSuccessArrowsColumn(4) + "";
+			this->lblPoints->Text = arrowController->countPoints() + "";
 
 		}
 		
@@ -592,20 +639,30 @@ private: System::Void UIGame_KeyDown(System::Object^  sender, System::Windows::F
 
 
 	switch (e->KeyCode) {
-	case Keys::Up: this->arrowController->SuceesArrowsUp(time); break;
-	case Keys::Down: this->arrowController->SuceesArrowsDown(time);
-					 break;
-		case Keys::Left: this->arrowController->SuceesArrowsLeft(time);	this->lblTotalAciertoIzquierda->Text = arrowController->getCountSuccessArrowsColumn(1) + ""; break;
-		case Keys::Right: this->arrowController->SuceesArrowsRight(time); break;
-		case Keys::P: timerArrows->Enabled = false;
+		case Keys::Left: this->lblTotalAciertoIzquierda->Text = this->arrowController->SuccessArrowsLeft(time) + ""; break;
+		case Keys::Up: this->lblTotalAciertoArriba->Text = this->arrowController->SuccessArrowsUp(time) + ""; break;
+		case Keys::Down: this->lblTotalAciertoAbajo->Text = this->arrowController->SuccessArrowsDown(time) + "";break;
+		case Keys::Right: this->lblTotalAciertoDerecha->Text =  this->arrowController->SuccessArrowsRight(time) + ""; break;
+		case Keys::P: 
+			player->Stop();
+			this->lblPausa->Visible = true;
+			timerArrows->Enabled = false;
 			timerGame->Enabled = false; break;;
-		case Keys::S: timerArrows->Enabled = true;
-						timerGame->Enabled = true;break;
+		case Keys::S: 
+			player->Play();
+			this->lblPausa->Visible = false;
+			timerArrows->Enabled = true;
+			timerGame->Enabled = true;break;
 	}
 
 }
 private: System::Void btnJugar_Click(System::Object^  sender, System::EventArgs^  e) {
+
+
+
 	
+	player->Play();
+
 	// Creamos la instancia de nuestro constrolador
 	arrowController = new ArrowsController();
 	
@@ -629,9 +686,19 @@ private: System::Void btnJugar_Click(System::Object^  sender, System::EventArgs^
 	}
 
 }
-private: System::Void btnNuevo_Click(System::Object^  sender, System::EventArgs^  e) {
 
-}
+
+		 void restartGame() {
+			 this->lblTotalIzquierda->Text = "0";
+			 this->lblTotalArriba->Text = "0";
+			 this->lblTotalAbajo->Text = "0";
+			 this->lblTotalDerecha->Text = "0";
+
+			 this->lblTotalAciertoIzquierda->Text = "0";
+			 this->lblTotalAciertoArriba->Text = "0";
+			 this->lblTotalAciertoAbajo->Text = "0";
+			 this->lblTotalAciertoDerecha->Text = "0";
+		 }
 };
 		 
 }

@@ -13,6 +13,7 @@ private:
 	bool hit;
 	int time;
 	bool inputArrow;
+	int countHitsTrue=0;
 public:
 	ArrowsModel(){}
 	//Constructor
@@ -27,9 +28,7 @@ public:
 		this->time = 0;
 		this->inputArrow = false;
 	}
-	//Destructor
-	~ArrowsModel() {}
-
+	
 	bool getInputArrow() {
 		return this->inputArrow;
 	}
@@ -77,11 +76,12 @@ public:
 
 			Rectangle rectangleVisible = Rectangle(this->width * idSpriteX, this->height * idSpriteY, width, height);
 			graphic->DrawImage(image, this->xCol, this->yCol, rectangleVisible, GraphicsUnit::Pixel);
+			// Permite contabilizar si las flechas pasaron por la linea de las flechas blancas
+			// Caso contrario indicará falso ya que esas flechas no se consideran para la contabilizacion
 			if (this->getColY() > 530 && this->getColY() < 570) {
 				this->inputArrow = true;
 			}
 	}
 
-	
 
 };

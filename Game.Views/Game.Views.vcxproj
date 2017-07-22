@@ -149,12 +149,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Font Include="Font\The_Bully.ttf" />
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="Music\Faded-Alan_Walker.mp3" />
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="Game.Views.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

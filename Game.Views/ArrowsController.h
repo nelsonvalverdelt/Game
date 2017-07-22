@@ -6,8 +6,12 @@
 #include "../Game.Views/ArrowsSuccessModel.h"
 #include <fstream>
 #include <iostream>
+
 using namespace std;
+//Permite interactuar con nuestras imagenes
 using namespace System::Drawing;
+//Permite utilizar archivos media
+using namespace System::Media;
 
 class ArrowsController {
 	
@@ -31,14 +35,11 @@ private:
 	int pixelY = 0;
 	int posX = 0, posY = 0;
 	int countArrowColumn1 = 0, countArrowColumn2 = 0, countArrowColumn3 = 0, countArrowColumn4 = 0;
-	int countHitCol1 = 0, countHitCol2 = 0, countHitCol3 = 0, countHitCol4=0;
-	string total;
-	
+	int countHitSuccess1 = 0, countHitSuccess2 = 0, countHitSuccess3 = 0, countHitSuccess4=0;
+
 public:
 
-	ArrowsController() {
-
-	}
+ArrowsController() {}
 
 #pragma region Lluvia de flechas
 
@@ -138,8 +139,11 @@ public:
 			}
 
 			if (listArrowsColumn4[i].getColY() == 550) {
+				//Nos permite tener el número de la flecha de la lluvia justo en la posición de las flechas de acierto
 				countArrowColumn4 = i;
 			}
+
+			
 		}
 	}
 
@@ -160,7 +164,7 @@ public:
 #pragma endregion
 
 #pragma region Acertación de flechas
-	void SuceesArrowsLeft(int time) {
+	int SuccessArrowsLeft(int time) {
 		//Verificamos si posición excede de la cantidad total de elementos almacenados en el vector
 		if (countArrowColumn1 < listArrowsColumn1.size()) {
 
@@ -169,11 +173,14 @@ public:
 				listArrowsColumn1[countArrowColumn1].setColY(770);
 				listArrowsColumn1[countArrowColumn1].setHit(true);
 				listArrowsColumn1[countArrowColumn1].setTime(time);
+				// Contador de aciertos
+				this->countHitSuccess1++;
 			}
 		}
+		return countHitSuccess1;
 	}
 
-	void SuceesArrowsUp(int time) {
+	int SuccessArrowsUp(int time) {
 
 		//Verificamos si posición excede de la cantidad total de elementos almacenados en el vector
 		if (countArrowColumn2 < listArrowsColumn2.size()) {
@@ -183,11 +190,13 @@ public:
 				listArrowsColumn2[countArrowColumn2].setColY(770);
 				listArrowsColumn2[countArrowColumn2].setHit(true);
 				listArrowsColumn2[countArrowColumn2].setTime(time);
+				this->countHitSuccess2++;
 			}
 		}
+		return countHitSuccess2;
 	}
 
-	void SuceesArrowsDown(int time) {
+	int SuccessArrowsDown(int time) {
 
 		//Verificamos si posición excede de la cantidad total de elementos almacenados en el vector
 		if (countArrowColumn3 < listArrowsColumn3.size()) {
@@ -197,12 +206,13 @@ public:
 				listArrowsColumn3[countArrowColumn3].setColY(770);
 				listArrowsColumn3[countArrowColumn3].setHit(true);
 				listArrowsColumn3[countArrowColumn3].setTime(time);
+				this->countHitSuccess3++;
 			}
 		}
-
+		return countHitSuccess3;
 	}
 
-	void SuceesArrowsRight(int time) {
+	int SuccessArrowsRight(int time) {
 
 		//Verificamos si posición excede de la cantidad total de elementos almacenados en el vector
 		if (countArrowColumn4 < listArrowsColumn4.size()) {
@@ -212,18 +222,37 @@ public:
 				listArrowsColumn4[countArrowColumn4].setColY(770);
 				listArrowsColumn4[countArrowColumn4].setHit(true);
 				listArrowsColumn4[countArrowColumn4].setTime(time);
+				this->countHitSuccess4++;
 			}
 		}
+		return countHitSuccess4;
 	}
 
+	// método que devuelve la cantidad de elementos 
+	int getCountArrowsColumn(int column) {
+		switch (column)
+		{
+		case 1: return listArrowsColumn1.size(); break;
+		case 2: return listArrowsColumn2.size(); break;
+		case 3: return listArrowsColumn3.size(); break;
+		case 4: return listArrowsColumn4.size(); break;
+		}
 
+	}
+#pragma endregion
+
+#pragma region Puntos
+	//Sumamos todas los aciertos y por cada acierto obtiene un punto
+	int countPoints() {
+		return this->countHitSuccess1 + this->countHitSuccess2 + this->countHitSuccess3 + this->countHitSuccess4;
+	}
 #pragma endregion
 
 #pragma region Guardar Datos Jugador
 
 	void guardarJuego() {
 		ofstream writeGame;
-		writeGame.open("Game.txt", ios::app);
+		writeGame.open("../Cobol/bin/x86/Debug/Game.txt", ios::app);
 		//writeGame << "Posición    Entrada    Dirección    Color      Acierto    Tiempo    Usuario\n";
 
 		for (int i = 0; i < listArrowsColumn1.size(); i++) {
@@ -233,12 +262,23 @@ public:
 			string hit = validateHit(listArrowsColumn1[i].getHit());
 			string arrow = validateArrow(listArrowsColumn1[i].getSpriteX());
 			int time = listArrowsColumn1[i].getTime();
-			writeGame << i;
+			if (i < 10) {
+				writeGame << "0" << i;
+			}
+			else {
+				writeGame << i;
+			}
 			writeGame << "        " << inputArrow.c_str();
 			writeGame << "        " << arrow.c_str();
 			writeGame << "        " << color.c_str();
 			writeGame << "        " << hit.c_str();
-			writeGame << "        " << time;
+			if (time < 10) {
+				writeGame << "        0"<< time;
+			}
+			else {
+				writeGame << "        " << time;
+			}
+			
 			writeGame << "        " << listUsers[0].c_str() << "\n";
 		}
 		for (int i = 0; i < listArrowsColumn2.size(); i++) {
@@ -248,12 +288,22 @@ public:
 			string hit = validateHit(listArrowsColumn2[i].getHit());
 			string arrow = validateArrow(listArrowsColumn2[i].getSpriteX());
 			int time = listArrowsColumn2[i].getTime();
-			writeGame << i;
+			if (i < 10) {
+				writeGame << "0" << i;
+			}
+			else {
+				writeGame << i;
+			}
 			writeGame << "        " << inputArrow.c_str();
 			writeGame << "        " << arrow.c_str();
 			writeGame << "        " << color.c_str();
 			writeGame << "        " << hit.c_str();
-			writeGame << "        " << time;
+			if (time < 10) {
+				writeGame << "        0" << time;
+			}
+			else {
+				writeGame << "        " << time;
+			}
 			writeGame << "        " << listUsers[0].c_str()<< "\n";
 		}
 
@@ -265,12 +315,23 @@ public:
 			string hit = validateHit(listArrowsColumn3[i].getHit());
 			string arrow = validateArrow(listArrowsColumn3[i].getSpriteX());
 			int time = listArrowsColumn3[i].getTime();
-			writeGame << i;
+			
+			if (i < 10) {
+				writeGame << "0" << i;
+			}
+			else {
+				writeGame << i;
+			}
 			writeGame << "        " << inputArrow.c_str();
 			writeGame << "        " << arrow.c_str();
 			writeGame << "        " << color.c_str();
 			writeGame << "        " << hit.c_str();
-			writeGame << "        " << time;
+			if (time < 10) {
+				writeGame << "        0"<< time;
+			}
+			else {
+				writeGame << "        " << time;
+			}
 			writeGame << "        " << listUsers[0].c_str() << "\n";
 		}
 
@@ -281,12 +342,22 @@ public:
 			string hit = validateHit(listArrowsColumn4[i].getHit());
 			string arrow = validateArrow(listArrowsColumn4[i].getSpriteX());
 			int time = listArrowsColumn4[i].getTime();
-			writeGame << i;
+			if (i < 10) {
+				writeGame << "0" << i;
+			}
+			else {
+				writeGame << i;
+			}
 			writeGame << "        " << inputArrow.c_str();
 			writeGame << "        " << arrow.c_str();
 			writeGame << "        " << color.c_str();
 			writeGame << "        " << hit.c_str();
-			writeGame << "        " << time;
+			if (time < 10) {
+				writeGame << "        0" << time;
+			}
+			else {
+				writeGame << "        " << time;
+			}
 			writeGame << "        " << listUsers[0].c_str() << "\n";
 		}
 		writeGame.close();
@@ -304,8 +375,6 @@ public:
 #pragma endregion
 
 #pragma region Validaciones
-
-
 
 	string validateArrow(int idSpriteX) {
 		// Obtenemos la dirección de la flecha
@@ -354,9 +423,9 @@ public:
 
 #pragma endregion
 
-#pragma region Eliminar elementos del vector
+#pragma region Reiniciar / Eliminar datos del juego
 
-	void deleteElemtVector() {
+	void deleteElementtVector() {
 		this->listArrowsColumn1.clear();
 		this->listArrowsColumn2.clear();
 		this->listArrowsColumn3.clear();
@@ -365,50 +434,4 @@ public:
 
 #pragma endregion
 
-	int getCountArrowsColumn(int column) {
-		switch (column)
-		{
-		case 1: return listArrowsColumn1.size(); break;
-		case 2: return listArrowsColumn2.size(); break;
-		case 3: return listArrowsColumn3.size(); break;
-		case 4: return listArrowsColumn4.size(); break;
-		}
-	}
-
-	int getCountSuccessArrowsColumn(int column) {
-
-		switch (column)
-		{
-		case 1:
-			for (int i = 0; i < listArrowsColumn1.size(); i++) {
-				if (listArrowsColumn1[i].getHit() == true) {
-					countHitCol1++;
-				}
-			}
-
-			return countHitCol1++;
-			break;
-		case 2:
-			for (int i = 0; i < listArrowsColumn2.size(); i++) {
-				if (listArrowsColumn2[i].getHit() == true) {
-					return countHitCol2++;
-				}
-			}
-			break;
-		case 3:
-			for (int i = 0; i < listArrowsColumn3.size(); i++) {
-				if (listArrowsColumn3[i].getHit() == true) {
-					return countHitCol3++;
-				}
-			}
-			break;
-		case 4: 
-			for (int i = 0; i < listArrowsColumn4.size(); i++) {
-				if (listArrowsColumn4[i].getHit() == true) {
-					return countHitCol4++;
-				}
-			}
-			break;
-		}
-	}
 };
