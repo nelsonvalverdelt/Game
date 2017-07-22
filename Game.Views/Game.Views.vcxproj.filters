@@ -43,6 +43,9 @@
     <EmbeddedResource Include="UIGame.resx">
       <Filter>Archivos de recursos</Filter>
     </EmbeddedResource>
+    <EmbeddedResource Include="UIUser.resx">
+      <Filter>Archivos de recursos</Filter>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Font Include="Font\The_Bully.ttf" />

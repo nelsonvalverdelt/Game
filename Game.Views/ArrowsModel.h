@@ -14,7 +14,8 @@ private:
 	int time;
 	bool inputArrow;
 public:
-
+	ArrowsModel(){}
+	//Constructor
 	ArrowsModel(Image^ image, int xCol, int idSpriteX) {
 		this->width = image->Width / 4;
 		this->height = image->Height / 4;
@@ -26,6 +27,8 @@ public:
 		this->time = 0;
 		this->inputArrow = false;
 	}
+	//Destructor
+	~ArrowsModel() {}
 
 	bool getInputArrow() {
 		return this->inputArrow;
@@ -78,5 +81,7 @@ public:
 				this->inputArrow = true;
 			}
 	}
+
+	
 
 };

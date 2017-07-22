@@ -1,0 +1,4 @@
+^D:\REPOSITORY\GAME\COBOL\OBJ\X86\DEBUG\PROGRAM1.OBJ
+MFCBT_Options=-Oobj\x86\Debug\Cobol.exe -N -FM obj\x86\Debug\Program1.obj . MFCBT_Objs=
+^D:\REPOSITORY\GAME\COBOL\OBJ\X86\DEBUG\GAME.OBJ
+MFCBT_Options=-Oobj\x86\Debug\Cobol.exe -N -FM obj\x86\Debug\Game.obj . MFCBT_Objs=

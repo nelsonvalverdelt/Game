@@ -1,0 +1,2 @@
+D:\Repository\Game\Cobol\bin\x86\Debug\Cobol.exe
+D:\Repository\Game\Cobol\obj\x86\Debug\Cobol.exe

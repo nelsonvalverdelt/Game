@@ -1,0 +1,4 @@
+^D:\REPOSITORY\GAME\COBOL\GAME.CBL
+MFCBT_Directives=int"D:obj\x86\Debug\Game.int" anim cobidy".\bin\x86\Debug\" sourcetabstop"4" noquery osext() warnings"1" max-error"100" . MFCBT_CopyPaths=
+^D:\REPOSITORY\GAME\COBOL\PROGRAM1.CBL
+MFCBT_Directives=int"D:obj\x86\Debug\Program1.int" anim cobidy".\bin\x86\Debug\" sourcetabstop"4" noquery osext() warnings"1" max-error"100" . MFCBT_CopyPaths=

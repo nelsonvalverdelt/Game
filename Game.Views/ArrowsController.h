@@ -10,36 +10,35 @@ using namespace std;
 using namespace System::Drawing;
 
 class ArrowsController {
+	
+#pragma region Vectores
+
+	//Lluvia de flechas
 	vector<ArrowsModel> listArrowsColumn1;
 	vector<ArrowsModel> listArrowsColumn2;
 	vector<ArrowsModel> listArrowsColumn3;
 	vector<ArrowsModel> listArrowsColumn4;
+
+	//Usuario
+	vector<string> listUsers;
+
+	//Flechas estática inferior
 	vector<ArrowsSuccessModel> listArrowsSuccess;
+
+#pragma endregion
+
 private:
-	int yCol = 0;
-	int yCol1 = 0, xCol1 = 0,
-		yCol2 = 0, xCol2 = 0,
-		yCol3 = 0, xCol3 = 0,
-		yCol4 = 0, xCol4 = 0;
-	int idSpriteXCol1 = 0, idSpriteYCol1 = 0,
-		idSpriteXCol2 = 0, idSpriteYCol2 = 0,
-		idSpriteXCol3 = 0, idSpriteYCol3 = 0,
-		idSpriteXCol4 = 0, idSpriteYCol4 = 0;
-
-	bool outputArrowCol = false;
-
-	int randomCol1 = 0, randomCol2 = 0, randomCol3 = 0, randomCol4 = 0;
-
-	int speed = 0, increaseSpeed = 0;
 	int pixelY = 0;
-	int posX=0, posY=0;
+	int posX = 0, posY = 0;
 	int countArrowColumn1 = 0, countArrowColumn2 = 0, countArrowColumn3 = 0, countArrowColumn4 = 0;
-
-	int indice = 0;
-	int cont = 0;
+	int countHitCol1 = 0, countHitCol2 = 0, countHitCol3 = 0, countHitCol4=0;
+	string total;
+	
 public:
 
-	ArrowsController() {}
+	ArrowsController() {
+
+	}
 
 #pragma region Lluvia de flechas
 
@@ -65,22 +64,22 @@ public:
 	}
 
 	void ArrowsRainColumn1(Graphics^ graphic, Image^ image) {
-		
+
 		for (int i = 0; i < listArrowsColumn1.size(); i++)
 		{
-				listArrowsColumn1[i].drawColumn(graphic, image);
-				pixelY = listArrowsColumn1[i].getColY();
-				pixelY++; //simulacion de movimiento por pixel
-				listArrowsColumn1[i].setColY(pixelY);
+			listArrowsColumn1[i].drawColumn(graphic, image);
+			pixelY = listArrowsColumn1[i].getColY();
+			pixelY++; //simulacion de movimiento por pixel
+			listArrowsColumn1[i].setColY(pixelY);
 
-				if (listArrowsColumn1[i].getColY() == 620) {
-					listArrowsColumn1[i].setColY(750);
-				}
+			if (listArrowsColumn1[i].getColY() == 620) {
+				listArrowsColumn1[i].setColY(750);
+			}
 
-				if (listArrowsColumn1[i].getColY() == 530) {
-					countArrowColumn1 = i;
-				}
-		}	
+			if (listArrowsColumn1[i].getColY() == 530) {
+				countArrowColumn1 = i;
+			}
+		}
 	}
 
 	void ArrowsRainColumn2(Graphics^ graphic, Image^ image) {
@@ -117,10 +116,10 @@ public:
 			}
 
 			if (listArrowsColumn3[i].getColY() == 530) {
-				countArrowColumn3  = i;
+				countArrowColumn3 = i;
 			}
 
-			
+
 		}
 
 	}
@@ -152,11 +151,11 @@ public:
 		for (int i = 0; i < 4; i++)
 		{
 			posX = 30 + (i * 120);
-			ArrowsSuccessModel arrowSuccess =  ArrowsSuccessModel(image,posX,550);
+			ArrowsSuccessModel arrowSuccess = ArrowsSuccessModel(image, posX, 550);
 			listArrowsSuccess.push_back(arrowSuccess);
 			listArrowsSuccess[i].drawSucccesArrow(graphic, image, i, 0);
 		}
-		
+
 	}
 #pragma endregion
 
@@ -195,16 +194,11 @@ public:
 
 			// Intercalo  de aceptación al presionar la flecha
 			if (listArrowsColumn3[countArrowColumn3].getColY() > 530 && listArrowsColumn3[countArrowColumn3].getColY() < 570) {
-
 				listArrowsColumn3[countArrowColumn3].setColY(770);
 				listArrowsColumn3[countArrowColumn3].setHit(true);
 				listArrowsColumn3[countArrowColumn3].setTime(time);
-				// indicamos que la flecha pasó
 			}
 		}
-
-
-
 
 	}
 
@@ -230,70 +224,82 @@ public:
 	void guardarJuego() {
 		ofstream writeGame;
 		writeGame.open("Game.txt", ios::app);
-		//writeGame << "Posición     Entrada     Dirección     Color       Acierto        Tiempo\n";
+		//writeGame << "Posición    Entrada    Dirección    Color      Acierto    Tiempo    Usuario\n";
 
 		for (int i = 0; i < listArrowsColumn1.size(); i++) {
+			string user = listUsers[0].c_str();
 			string inputArrow = validateInputArrow(listArrowsColumn1[i].getInputArrow());
 			string color = validateColor(listArrowsColumn1[i].getSpriteY());
 			string hit = validateHit(listArrowsColumn1[i].getHit());
 			string arrow = validateArrow(listArrowsColumn1[i].getSpriteX());
 			int time = listArrowsColumn1[i].getTime();
-
-			writeGame << "   " << i;
-			writeGame << "             " << inputArrow.c_str();
+			writeGame << i;
+			writeGame << "        " << inputArrow.c_str();
 			writeGame << "        " << arrow.c_str();
-			writeGame << "    " << color.c_str();
-			writeGame << "       " << hit.c_str();
-			writeGame << "            " << time << "\n";
+			writeGame << "        " << color.c_str();
+			writeGame << "        " << hit.c_str();
+			writeGame << "        " << time;
+			writeGame << "        " << listUsers[0].c_str() << "\n";
 		}
 		for (int i = 0; i < listArrowsColumn2.size(); i++) {
+			string user = listUsers[0].c_str();
 			string inputArrow = validateInputArrow(listArrowsColumn2[i].getInputArrow());
 			string color = validateColor(listArrowsColumn2[i].getSpriteY());
 			string hit = validateHit(listArrowsColumn2[i].getHit());
 			string arrow = validateArrow(listArrowsColumn2[i].getSpriteX());
 			int time = listArrowsColumn2[i].getTime();
-
-			writeGame << "   " << i;
-			writeGame << "             " << inputArrow.c_str();
+			writeGame << i;
+			writeGame << "        " << inputArrow.c_str();
 			writeGame << "        " << arrow.c_str();
-			writeGame << "    " << color.c_str();
-			writeGame << "       " << hit.c_str();
-			writeGame << "            " << time << "\n";
+			writeGame << "        " << color.c_str();
+			writeGame << "        " << hit.c_str();
+			writeGame << "        " << time;
+			writeGame << "        " << listUsers[0].c_str()<< "\n";
 		}
 
 
 		for (int i = 0; i < listArrowsColumn3.size(); i++) {
-				string inputArrow = validateInputArrow(listArrowsColumn3[i].getInputArrow());
-				string color = validateColor(listArrowsColumn3[i].getSpriteY());
-				string hit = validateHit(listArrowsColumn3[i].getHit());
-				string arrow = validateArrow(listArrowsColumn3[i].getSpriteX());
-				int time = listArrowsColumn3[i].getTime();
-
-				writeGame << "   " << i;
-				writeGame << "             " << inputArrow.c_str();
-				writeGame << "        " << arrow.c_str();
-				writeGame << "    " << color.c_str();
-				writeGame << "       " << hit.c_str();
-				writeGame << "            " << time <<"\n";
+			string user = listUsers[0].c_str();
+			string inputArrow = validateInputArrow(listArrowsColumn3[i].getInputArrow());
+			string color = validateColor(listArrowsColumn3[i].getSpriteY());
+			string hit = validateHit(listArrowsColumn3[i].getHit());
+			string arrow = validateArrow(listArrowsColumn3[i].getSpriteX());
+			int time = listArrowsColumn3[i].getTime();
+			writeGame << i;
+			writeGame << "        " << inputArrow.c_str();
+			writeGame << "        " << arrow.c_str();
+			writeGame << "        " << color.c_str();
+			writeGame << "        " << hit.c_str();
+			writeGame << "        " << time;
+			writeGame << "        " << listUsers[0].c_str() << "\n";
 		}
 
 		for (int i = 0; i < listArrowsColumn4.size(); i++) {
+			string user = listUsers[0].c_str();
 			string inputArrow = validateInputArrow(listArrowsColumn4[i].getInputArrow());
 			string color = validateColor(listArrowsColumn4[i].getSpriteY());
 			string hit = validateHit(listArrowsColumn4[i].getHit());
 			string arrow = validateArrow(listArrowsColumn4[i].getSpriteX());
 			int time = listArrowsColumn4[i].getTime();
-
-			writeGame << "   " << i;
-			writeGame << "             " << inputArrow.c_str();
+			writeGame << i;
+			writeGame << "        " << inputArrow.c_str();
 			writeGame << "        " << arrow.c_str();
-			writeGame << "    " << color.c_str();
-			writeGame << "       " << hit.c_str();
-			writeGame << "            " << time << "\n";
+			writeGame << "        " << color.c_str();
+			writeGame << "        " << hit.c_str();
+			writeGame << "        " << time;
+			writeGame << "        " << listUsers[0].c_str() << "\n";
 		}
 		writeGame.close();
 	}
 
+
+#pragma endregion
+
+#pragma region Usuario
+
+	void addUser(string user) {
+		listUsers.push_back(user);
+	}
 
 #pragma endregion
 
@@ -316,7 +322,7 @@ public:
 	}
 
 	string validateColor(int idSpriteY) {
-	
+
 		// Los espacios sirven para alinearlos por espacios en el reporte
 		switch (idSpriteY)
 		{
@@ -348,5 +354,61 @@ public:
 
 #pragma endregion
 
-	
+#pragma region Eliminar elementos del vector
+
+	void deleteElemtVector() {
+		this->listArrowsColumn1.clear();
+		this->listArrowsColumn2.clear();
+		this->listArrowsColumn3.clear();
+		this->listArrowsColumn4.clear();
+	}
+
+#pragma endregion
+
+	int getCountArrowsColumn(int column) {
+		switch (column)
+		{
+		case 1: return listArrowsColumn1.size(); break;
+		case 2: return listArrowsColumn2.size(); break;
+		case 3: return listArrowsColumn3.size(); break;
+		case 4: return listArrowsColumn4.size(); break;
+		}
+	}
+
+	int getCountSuccessArrowsColumn(int column) {
+
+		switch (column)
+		{
+		case 1:
+			for (int i = 0; i < listArrowsColumn1.size(); i++) {
+				if (listArrowsColumn1[i].getHit() == true) {
+					countHitCol1++;
+				}
+			}
+
+			return countHitCol1++;
+			break;
+		case 2:
+			for (int i = 0; i < listArrowsColumn2.size(); i++) {
+				if (listArrowsColumn2[i].getHit() == true) {
+					return countHitCol2++;
+				}
+			}
+			break;
+		case 3:
+			for (int i = 0; i < listArrowsColumn3.size(); i++) {
+				if (listArrowsColumn3[i].getHit() == true) {
+					return countHitCol3++;
+				}
+			}
+			break;
+		case 4: 
+			for (int i = 0; i < listArrowsColumn4.size(); i++) {
+				if (listArrowsColumn4[i].getHit() == true) {
+					return countHitCol4++;
+				}
+			}
+			break;
+		}
+	}
 };
