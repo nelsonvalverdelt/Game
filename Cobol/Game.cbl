@@ -12,12 +12,12 @@
        FD DATOS.
        01 DetalleJuego.
            88 FinArchivo VALUE HIGH-VALUES.
-           02 Posicion PIC 9(9).
+           02 Posicion PIC 9(10).
            02 Entrada PIC X(10).
            02 Direccion PIC X(17).
            02 Color PIC X(16).
            02 Acierto PIC X(10).
-           02 Tiempo PIC 9(10).
+           02 Tiempo PIC 9(9).
            02 Nombre PIC X(15).
 .
        WORKING-STORAGE SECTION.
@@ -227,14 +227,14 @@
           DISPLAY "------------ RESULTADO ---------------"
           DISPLAY "RESULTADO DE ", USUARIO
                       
-               IF TOTALACIERTO1 > TOTALERROR1 THEN
+               IF TOTALACIERTO1 < TOTALERROR1 THEN
 
                    SUBTRACT TOTALACIERTO1 FROM TOTALERROR1 GIVING
                    TOTALPUNTOS1
 
                    DISPLAY "   PUNTOS OBTENIDOS:  ", TOTALPUNTOS1
                 
-               ELSE IF TOTALACIERTO1 < TOTALERROR1 THEN
+               ELSE IF TOTALACIERTO1 > TOTALERROR1 THEN
 
                    SUBTRACT TOTALERROR1 FROM TOTALACIERTO1 GIVING
                    TOTALPUNTOS1
@@ -248,14 +248,14 @@
                END-IF
 
           DISPLAY "RESULTADO DE ", USUARIO2
-               IF TOTALACIERTO2 > TOTALERROR2 THEN
+               IF TOTALACIERTO2 < TOTALERROR2 THEN
 
                    SUBTRACT TOTALACIERTO2 FROM TOTALERROR2 GIVING
                    TOTALPUNTOS2
 
                    DISPLAY "   PUNTOS OBTENIDOS:  ", TOTALPUNTOS2
                 
-               ELSE IF TOTALACIERTO2 < TOTALERROR2 THEN
+               ELSE IF TOTALACIERTO2 > TOTALERROR2 THEN
 
                    SUBTRACT TOTALERROR2 FROM TOTALACIERTO2 GIVING
                    TOTALPUNTOS2
